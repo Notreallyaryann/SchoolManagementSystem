@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField, Grid, Box, Typography, CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addStuff } from '../../../redux/userRelated/userHandle';
@@ -87,97 +86,94 @@ const SubjectForm = () => {
     }, [status, navigate, error, response, dispatch]);
 
     return (
-        <form onSubmit={submitHandler}>
-            <Box mb={2}>
-                <Typography variant="h6" >Add Subjects</Typography>
-            </Box>
-            <Grid container spacing={2}>
+        <div className="max-w-4xl mx-auto p-6">
+            <h2 className="text-xl font-bold mb-4">Add Subjects</h2>
+            <form onSubmit={submitHandler} className="space-y-6">
                 {subjects.map((subject, index) => (
-                    <React.Fragment key={index}>
-                        <Grid item xs={6}>
-                            <TextField
-                                fullWidth
-                                label="Subject Name"
-                                variant="outlined"
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                        <div className="md:col-span-5">
+                            <label htmlFor={`subName-${index}`} className="block text-sm font-medium text-gray-700 mb-1">
+                                Subject Name
+                            </label>
+                            <input
+                                id={`subName-${index}`}
+                                type="text"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Subject Name"
                                 value={subject.subName}
                                 onChange={handleSubjectNameChange(index)}
-                                sx={styles.inputField}
                                 required
                             />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                label="Subject Code"
-                                variant="outlined"
+                        </div>
+                        <div className="md:col-span-3">
+                            <label htmlFor={`subCode-${index}`} className="block text-sm font-medium text-gray-700 mb-1">
+                                Subject Code
+                            </label>
+                            <input
+                                id={`subCode-${index}`}
+                                type="text"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Subject Code"
                                 value={subject.subCode}
                                 onChange={handleSubjectCodeChange(index)}
-                                sx={styles.inputField}
                                 required
                             />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                label="Sessions"
-                                variant="outlined"
+                        </div>
+                        <div className="md:col-span-2">
+                            <label htmlFor={`sessions-${index}`} className="block text-sm font-medium text-gray-700 mb-1">
+                                Sessions
+                            </label>
+                            <input
+                                id={`sessions-${index}`}
                                 type="number"
-                                inputProps={{ min: 0 }}
+                                min="0"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={subject.sessions}
                                 onChange={handleSessionsChange(index)}
-                                sx={styles.inputField}
                                 required
                             />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Box display="flex" alignItems="flex-end">
-                                {index === 0 ? (
-                                    <Button
-                                        variant="outlined"
-                                        color="primary"
-                                        onClick={handleAddSubject}
-                                    >
-                                        Add Subject
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant="outlined"
-                                        color="error"
-                                        onClick={handleRemoveSubject(index)}
-                                    >
-                                        Remove
-                                    </Button>
-                                )}
-                            </Box>
-                        </Grid>
-                    </React.Fragment>
-                ))}
-                <Grid item xs={12}>
-                    <Box display="flex" justifyContent="flex-end">
-                        <Button variant="contained" color="primary" type="submit" disabled={loader}>
-                            {loader ? (
-                                <CircularProgress size={24} color="inherit" />
+                        </div>
+                        <div className="md:col-span-2">
+                            {index === 0 ? (
+                                <button
+                                    type="button"
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-colors"
+                                    onClick={handleAddSubject}
+                                >
+                                    Add Subject
+                                </button>
                             ) : (
-                                'Save'
+                                <button
+                                    type="button"
+                                    className="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md transition-colors"
+                                    onClick={handleRemoveSubject(index)}
+                                >
+                                    Remove
+                                </button>
                             )}
-                        </Button>
-                    </Box>
-                </Grid>
-                <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
-            </Grid>
-        </form>
+                        </div>
+                    </div>
+                ))}
+                <div className="flex justify-end pt-4">
+                    <button
+                        type="submit"
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors disabled:opacity-70 flex items-center justify-center"
+                        disabled={loader}
+                    >
+                        {loader ? (
+                            <div className="flex items-center">
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                                Saving...
+                            </div>
+                        ) : (
+                            'Save'
+                        )}
+                    </button>
+                </div>
+            </form>
+            <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
+        </div>
     );
 }
 
-export default SubjectForm
-
-const styles = {
-    inputField: {
-        '& .MuiInputLabel-root': {
-            color: '#838080',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#838080',
-        },
-    },
-};
+export default SubjectForm;

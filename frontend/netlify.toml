@@ -3,7 +3,8 @@
   command = "npm run build"
 
 [build.environment]
-  NPM_FLAGS = "--verbose"
+  # Skip optional dependencies (like fsevents) during npm install
+  NPM_FLAGS = "--no-optional --verbose"
 
 [[redirects]]
   from = "/*"
@@ -14,4 +15,5 @@
   for = "/*"
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
+
 

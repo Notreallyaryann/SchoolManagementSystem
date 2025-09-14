@@ -1,6 +1,4 @@
-import React from 'react'
-import styled from 'styled-components';
-import { Card, CardContent, Typography } from '@mui/material';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 const TeacherProfile = () => {
@@ -14,34 +12,18 @@ const TeacherProfile = () => {
   const teachSchool = currentUser.school
 
   return (
-    <>
-      <ProfileCard>
-        <ProfileCardContent>
-          <ProfileText>Name: {currentUser.name}</ProfileText>
-          <ProfileText>Email: {currentUser.email}</ProfileText>
-          <ProfileText>Class: {teachSclass.sclassName}</ProfileText>
-          <ProfileText>Subject: {teachSubject.subName}</ProfileText>
-          <ProfileText>School: {teachSchool.schoolName}</ProfileText>
-        </ProfileCardContent>
-      </ProfileCard>
-    </>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+      <div className="bg-white rounded-xl shadow-md p-6 w-full max-w-md">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="text-lg font-medium text-gray-800">Name: {currentUser.name}</div>
+          <div className="text-lg font-medium text-gray-800">Email: {currentUser.email}</div>
+          <div className="text-lg font-medium text-gray-800">Class: {teachSclass.sclassName}</div>
+          <div className="text-lg font-medium text-gray-800">Subject: {teachSubject.subName}</div>
+          <div className="text-lg font-medium text-gray-800">School: {teachSchool.schoolName}</div>
+        </div>
+      </div>
+    </div>
   )
 }
 
 export default TeacherProfile
-
-const ProfileCard = styled(Card)`
-  margin: 20px;
-  width: 400px;
-  border-radius: 10px;
-`;
-
-const ProfileCardContent = styled(CardContent)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const ProfileText = styled(Typography)`
-  margin: 10px;
-`;

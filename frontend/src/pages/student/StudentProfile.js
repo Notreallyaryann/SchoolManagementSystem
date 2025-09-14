@@ -1,6 +1,4 @@
-import React from 'react'
-import styled from 'styled-components';
-import { Card, CardContent, Typography, Grid, Box, Avatar, Container, Paper } from '@mui/material';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 const StudentProfile = () => {
@@ -13,94 +11,76 @@ const StudentProfile = () => {
   const studentSchool = currentUser.school
 
   return (
-    <>
-      <Container maxWidth="md">
-        <StyledPaper elevation={3}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Box display="flex" justifyContent="center">
-                <Avatar alt="Student Avatar" sx={{ width: 150, height: 150 }}>
-                  {String(currentUser.name).charAt(0)}
-                </Avatar>
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Box display="flex" justifyContent="center">
-                <Typography variant="h5" component="h2" textAlign="center">
-                  {currentUser.name}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Box display="flex" justifyContent="center">
-                <Typography variant="subtitle1" component="p" textAlign="center">
-                  Student Roll No: {currentUser.rollNum}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Box display="flex" justifyContent="center">
-                <Typography variant="subtitle1" component="p" textAlign="center">
-                  Class: {sclassName.sclassName}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Box display="flex" justifyContent="center">
-                <Typography variant="subtitle1" component="p" textAlign="center">
-                  School: {studentSchool.schoolName}
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </StyledPaper>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Personal Information
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle1" component="p">
-                  <strong>Date of Birth:</strong> January 1, 2000
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle1" component="p">
-                  <strong>Gender:</strong> Male
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle1" component="p">
-                  <strong>Email:</strong> student@example.com
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle1" component="p">
-                  <strong>Phone:</strong> (123) 456-7890
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle1" component="p">
-                  <strong>Address:</strong> kanpur
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle1" component="p">
-                  <strong>Emergency Contact:</strong> (999) 999-9999
-                </Typography>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Container>
-    </>
+    <div className="max-w-2xl mx-auto p-4">
+      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div className="grid grid-cols-1 gap-4">
+          <div className="flex justify-center">
+            <div className="w-36 h-36 rounded-full bg-blue-500 flex items-center justify-center text-white text-6xl font-bold">
+              {String(currentUser.name).charAt(0)}
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <h2 className="text-2xl font-semibold text-center">
+              {currentUser.name}
+            </h2>
+          </div>
+          <div className="flex justify-center">
+            <p className="text-lg text-center">
+              Student Roll No: {currentUser.rollNum}
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <p className="text-lg text-center">
+              Class: {sclassName.sclassName}
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <p className="text-lg text-center">
+              School: {studentSchool.schoolName}
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="mb-4">
+          <h3 className="text-xl font-semibold">Personal Information</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <p className="text-lg">
+              <span className="font-semibold">Date of Birth:</span> January 1, 2000
+            </p>
+          </div>
+          <div>
+            <p className="text-lg">
+              <span className="font-semibold">Gender:</span> Male
+            </p>
+          </div>
+          <div>
+            <p className="text-lg">
+              <span className="font-semibold">Email:</span> student@example.com
+            </p>
+          </div>
+          <div>
+            <p className="text-lg">
+              <span className="font-semibold">Phone:</span> (123) 456-7890
+            </p>
+          </div>
+          <div>
+            <p className="text-lg">
+              <span className="font-semibold">Address:</span> kanpur
+            </p>
+          </div>
+          <div>
+            <p className="text-lg">
+              <span className="font-semibold">Emergency Contact:</span> (999) 999-9999
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
 export default StudentProfile
-
-const StyledPaper = styled(Paper)`
-  padding: 20px;
-  margin-bottom: 20px;
-`;

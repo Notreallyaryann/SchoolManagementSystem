@@ -1,11 +1,7 @@
-import { useEffect } from "react";
-import * as React from 'react';
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { getClassStudents } from "../../redux/sclassRelated/sclassHandle";
-import { Paper, Box, Typography, ButtonGroup, Button, Popper, Grow, ClickAwayListener, MenuList, MenuItem } from '@mui/material';
-import { BlackButton, BlueButton} from "../../components/buttonStyles";
-import TableTemplate from "../../components/TableTemplate";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 
 const TeacherClassDetails = () => {
@@ -41,9 +37,9 @@ const TeacherClassDetails = () => {
     const StudentsButtonHaver = ({ row }) => {
         const options = ['Take Attendance', 'Provide Marks'];
 
-        const [open, setOpen] = React.useState(false);
-        const anchorRef = React.useRef(null);
-        const [selectedIndex, setSelectedIndex] = React.useState(0);
+        const [open, setOpen] = useState(false);
+        const anchorRef = useRef(null);
+        const [selectedIndex, setSelectedIndex] = useState(0);
 
         const handleClick = () => {
             console.info(`You clicked ${options[selectedIndex]}`);
@@ -77,97 +73,138 @@ const TeacherClassDetails = () => {
 
             setOpen(false);
         };
+
+        useEffect(() => {
+            // Add event listener to close dropdown when clicking outside
+            const handleClickOutside = (event) => {
+                if (anchorRef.current && !anchorRef.current.contains(event.target)) {
+                    setOpen(false);
+                }
+            };
+
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }, []);
+
         return (
-            <>
-                <BlueButton
-                    variant="contained"
-                    onClick={() =>
-                        navigate("/Teacher/class/student/" + row.id)
-                    }
+            <div className="flex gap-2">
+                <button
+                    onClick={() => navigate("/Teacher/class/student/" + row.id)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
                 >
                     View
-                </BlueButton>
-                <React.Fragment>
-                    <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-                        <Button onClick={handleClick}>{options[selectedIndex]}</Button>
-                        <BlackButton
-                            size="small"
-                            aria-controls={open ? 'split-button-menu' : undefined}
-                            aria-expanded={open ? 'true' : undefined}
-                            aria-label="select merge strategy"
-                            aria-haspopup="menu"
+                </button>
+                
+                <div className="relative" ref={anchorRef}>
+                    <div className="flex">
+                        <button
+                            onClick={handleClick}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-l hover:bg-blue-700 transition-colors"
+                        >
+                            {options[selectedIndex]}
+                        </button>
+                        <button
                             onClick={handleToggle}
+                            className="bg-black text-white px-2 py-2 rounded-r hover:bg-gray-800 transition-colors flex items-center"
                         >
                             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-                        </BlackButton>
-                    </ButtonGroup>
-                    <Popper
-                        sx={{
-                            zIndex: 1,
-                        }}
-                        open={open}
-                        anchorEl={anchorRef.current}
-                        role={undefined}
-                        transition
-                        disablePortal
-                    >
-                        {({ TransitionProps, placement }) => (
-                            <Grow
-                                {...TransitionProps}
-                                style={{
-                                    transformOrigin:
-                                        placement === 'bottom' ? 'center top' : 'center bottom',
-                                }}
-                            >
-                                <Paper>
-                                    <ClickAwayListener onClickAway={handleClose}>
-                                        <MenuList id="split-button-menu" autoFocusItem>
-                                            {options.map((option, index) => (
-                                                <MenuItem
-                                                    key={option}
-                                                    disabled={index === 2}
-                                                    selected={index === selectedIndex}
-                                                    onClick={(event) => handleMenuItemClick(event, index)}
-                                                >
-                                                    {option}
-                                                </MenuItem>
-                                            ))}
-                                        </MenuList>
-                                    </ClickAwayListener>
-                                </Paper>
-                            </Grow>
-                        )}
-                    </Popper>
-                </React.Fragment>
-            </>
+                        </button>
+                    </div>
+                    
+                    {open && (
+                        <div className="absolute right-0 z-10 mt-1 w-48 bg-white rounded-md shadow-lg overflow-hidden">
+                            <div className="py-1">
+                                {options.map((option, index) => (
+                                    <button
+                                        key={option}
+                                        onClick={(event) => handleMenuItemClick(event, index)}
+                                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
+                                            index === selectedIndex ? 'bg-gray-100' : ''
+                                        }`}
+                                    >
+                                        {option}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
+    const TableTemplate = ({ buttonHaver: ButtonHaver, columns, rows }) => {
+        return (
+            <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            {columns.map((column) => (
+                                <th
+                                    key={column.id}
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    {column.label}
+                                </th>
+                            ))}
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {rows.map((row, index) => {
+                            return (
+                                <tr key={index} className="hover:bg-gray-50">
+                                    {columns.map((column) => {
+                                        const value = row[column.id];
+                                        return (
+                                            <td key={column.id} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {value}
+                                            </td>
+                                        );
+                                    })}
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <ButtonHaver row={row} />
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
         );
     };
 
     return (
         <>
             {loading ? (
-                <div>Loading...</div>
+                <div className="flex justify-center items-center h-64">
+                    <div>Loading...</div>
+                </div>
             ) : (
                 <>
-                    <Typography variant="h4" align="center" gutterBottom>
+                    <h1 className="text-2xl font-bold text-center mb-4">
                         Class Details
-                    </Typography>
+                    </h1>
                     {getresponse ? (
                         <>
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                            <div className="flex justify-end mt-4">
                                 No Students Found
-                            </Box>
+                            </div>
                         </>
                     ) : (
-                        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                            <Typography variant="h5" gutterBottom>
+                        <div className="w-full overflow-hidden bg-white rounded-lg shadow">
+                            <h2 className="text-xl font-semibold p-4">
                                 Students List:
-                            </Typography>
+                            </h2>
 
                             {Array.isArray(sclassStudents) && sclassStudents.length > 0 &&
                                 <TableTemplate buttonHaver={StudentsButtonHaver} columns={studentColumns} rows={studentRows} />
                             }
-                        </Paper>
+                        </div>
                     )}
                 </>
             )}

@@ -1,14 +1,12 @@
-import { Container, Grid, Paper } from '@mui/material'
-import SeeNotice from '../../components/SeeNotice';
 import CountUp from 'react-countup';
-import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getClassStudents, getSubjectDetails } from '../../redux/sclassRelated/sclassHandle';
+import SeeNotice from '../../components/SeeNotice';
 import Students from "../../assets/img1.png";
 import Lessons from "../../assets/subjects.svg";
 import Tests from "../../assets/assignment.svg";
 import Time from "../../assets/time.svg";
-import { getClassStudents, getSubjectDetails } from '../../redux/sclassRelated/sclassHandle';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 
 const TeacherHomePage = () => {
     const dispatch = useDispatch();
@@ -16,84 +14,62 @@ const TeacherHomePage = () => {
     const { currentUser } = useSelector((state) => state.user);
     const { subjectDetails, sclassStudents } = useSelector((state) => state.sclass);
 
-    const classID = currentUser.teachSclass?._id
-    const subjectID = currentUser.teachSubject?._id
+    const classID = currentUser.teachSclass?._id;
+    const subjectID = currentUser.teachSubject?._id;
 
     useEffect(() => {
-        dispatch(getSubjectDetails(subjectID, "Subject"));
-        dispatch(getClassStudents(classID));
+        if (subjectID) dispatch(getSubjectDetails(subjectID, "Subject"));
+        if (classID) dispatch(getClassStudents(classID));
     }, [dispatch, subjectID, classID]);
 
-    const numberOfStudents = sclassStudents && sclassStudents.length;
-    const numberOfSessions = subjectDetails && subjectDetails.sessions
+    const numberOfStudents = sclassStudents?.length || 0;
+    const numberOfSessions = subjectDetails?.sessions || 0;
 
     return (
-        <>
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Students} alt="Students" />
-                            <Title>
-                                Class Students
-                            </Title>
-                            <Data start={0} end={numberOfStudents} duration={2.5} />
-                        </StyledPaper>
-                    </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Lessons} alt="Lessons" />
-                            <Title>
-                                Total Lessons
-                            </Title>
-                            <Data start={0} end={numberOfSessions} duration={5} />
-                        </StyledPaper>
-                    </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Tests} alt="Tests" />
-                            <Title>
-                                Tests Taken
-                            </Title>
-                            <Data start={0} end={24} duration={4} />
-                        </StyledPaper>
-                    </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Time} alt="Time" />
-                            <Title>
-                                Total Hours
-                            </Title>
-                            <Data start={0} end={30} duration={4} suffix="hrs"/>                        </StyledPaper>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                            <SeeNotice />
-                        </Paper>
-                    </Grid>
-                </Grid>
-            </Container>
-        </>
-    )
-}
+        <div className="max-w-7xl mx-auto mt-8 mb-8 px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                {/* Class Students Card */}
+                <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-between h-64 text-center">
+                    <img src={Students} alt="Students" className="h-20 w-20 object-contain" />
+                    <p className="text-xl font-semibold">Class Students</p>
+                    <div className="text-3xl font-bold text-green-600">
+                        <CountUp start={0} end={numberOfStudents} duration={2.5} separator="," />
+                    </div>
+                </div>
 
-const StyledPaper = styled(Paper)`
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  height: 200px;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-`;
+                {/* Total Lessons Card */}
+                <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-between h-64 text-center">
+                    <img src={Lessons} alt="Lessons" className="h-20 w-20 object-contain" />
+                    <p className="text-xl font-semibold">Total Lessons</p>
+                    <div className="text-3xl font-bold text-green-600">
+                        <CountUp start={0} end={numberOfSessions} duration={2.5} separator="," />
+                    </div>
+                </div>
 
-const Title = styled.p`
-  font-size: 1.25rem;
-`;
+                {/* Tests Taken Card */}
+                <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-between h-64 text-center">
+                    <img src={Tests} alt="Tests" className="h-20 w-20 object-contain" />
+                    <p className="text-xl font-semibold">Tests Taken</p>
+                    <div className="text-3xl font-bold text-green-600">
+                        <CountUp start={0} end={24} duration={4} separator="," />
+                    </div>
+                </div>
 
-const Data = styled(CountUp)`
-  font-size: calc(1.3rem + .6vw);
-  color: green;
-`;
+                {/* Total Hours Card */}
+                <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-between h-64 text-center">
+                    <img src={Time} alt="Time" className="h-20 w-20 object-contain" />
+                    <p className="text-xl font-semibold">Total Hours</p>
+                    <div className="text-3xl font-bold text-green-600">
+                        <CountUp start={0} end={30} duration={4} separator="," suffix=" hrs" />
+                    </div>
+                </div>
+            </div>
 
-export default TeacherHomePage
+            <div className="bg-white rounded-lg shadow-md p-6 flex flex-col">
+                <SeeNotice />
+            </div>
+        </div>
+    );
+};
+
+export default TeacherHomePage;

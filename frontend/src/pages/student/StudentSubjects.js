@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubjectList } from '../../redux/sclassRelated/sclassHandle';
-import { BottomNavigation, BottomNavigationAction, Container, Paper, Table, TableBody, TableHead, Typography } from '@mui/material';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
 import CustomBarChart from '../../components/CustomBarChart'
 
@@ -9,10 +8,8 @@ import InsertChartIcon from '@mui/icons-material/InsertChart';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
-import { StyledTableCell, StyledTableRow } from '../../components/styles';
 
 const StudentSubjects = () => {
-
     const dispatch = useDispatch();
     const { subjectsList, sclassDetails } = useSelector((state) => state.sclass);
     const { userDetails, currentUser, loading, response, error } = useSelector((state) => state.user);
@@ -34,42 +31,45 @@ const StudentSubjects = () => {
     }, [userDetails])
 
     useEffect(() => {
-        if (subjectMarks === []) {
+        // Fix: Check if subjectMarks is empty by checking its length
+        if (subjectMarks.length === 0) {
             dispatch(getSubjectList(currentUser.sclassName._id, "ClassSubjects"));
         }
     }, [subjectMarks, dispatch, currentUser.sclassName._id]);
 
-    const handleSectionChange = (event, newSection) => {
+    const handleSectionChange = (newSection) => {
         setSelectedSection(newSection);
     };
 
     const renderTableSection = () => {
         return (
             <>
-                <Typography variant="h4" align="center" gutterBottom>
+                <h2 className="text-2xl font-bold text-center mb-4">
                     Subject Marks
-                </Typography>
-                <Table>
-                    <TableHead>
-                        <StyledTableRow>
-                            <StyledTableCell>Subject</StyledTableCell>
-                            <StyledTableCell>Marks</StyledTableCell>
-                        </StyledTableRow>
-                    </TableHead>
-                    <TableBody>
-                        {subjectMarks.map((result, index) => {
-                            if (!result.subName || !result.marksObtained) {
-                                return null;
-                            }
-                            return (
-                                <StyledTableRow key={index}>
-                                    <StyledTableCell>{result.subName.subName}</StyledTableCell>
-                                    <StyledTableCell>{result.marksObtained}</StyledTableCell>
-                                </StyledTableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
+                </h2>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marks</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {subjectMarks.map((result, index) => {
+                                if (!result.subName || !result.marksObtained) {
+                                    return null;
+                                }
+                                return (
+                                    <tr key={index} className="hover:bg-gray-50">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{result.subName.subName}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{result.marksObtained}</td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </>
         );
     };
@@ -80,54 +80,62 @@ const StudentSubjects = () => {
 
     const renderClassDetailsSection = () => {
         return (
-            <Container>
-                <Typography variant="h4" align="center" gutterBottom>
+            <div className="max-w-4xl mx-auto p-4">
+                <h2 className="text-2xl font-bold text-center mb-4">
                     Class Details
-                </Typography>
-                <Typography variant="h5" gutterBottom>
+                </h2>
+                <h3 className="text-xl font-semibold mb-3">
                     You are currently in Class {sclassDetails && sclassDetails.sclassName}
-                </Typography>
-                <Typography variant="h6" gutterBottom>
+                </h3>
+                <h4 className="text-lg font-medium mb-3">
                     And these are the subjects:
-                </Typography>
+                </h4>
                 {subjectsList &&
                     subjectsList.map((subject, index) => (
-                        <div key={index}>
-                            <Typography variant="subtitle1">
+                        <div key={index} className="mb-2">
+                            <p className="text-base">
                                 {subject.subName} ({subject.subCode})
-                            </Typography>
+                            </p>
                         </div>
                     ))}
-            </Container>
+            </div>
         );
     };
 
     return (
         <>
             {loading ? (
-                <div>Loading...</div>
+                <div className="flex justify-center items-center h-64">
+                    <div>Loading...</div>
+                </div>
             ) : (
                 <div>
                     {subjectMarks && Array.isArray(subjectMarks) && subjectMarks.length > 0
                         ?
                         (<>
-                            {selectedSection === 'table' && renderTableSection()}
-                            {selectedSection === 'chart' && renderChartSection()}
+                            <div className="pb-16">
+                                {selectedSection === 'table' && renderTableSection()}
+                                {selectedSection === 'chart' && renderChartSection()}
+                            </div>
 
-                            <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-                                <BottomNavigation value={selectedSection} onChange={handleSectionChange} showLabels>
-                                    <BottomNavigationAction
-                                        label="Table"
-                                        value="table"
-                                        icon={selectedSection === 'table' ? <TableChartIcon /> : <TableChartOutlinedIcon />}
-                                    />
-                                    <BottomNavigationAction
-                                        label="Chart"
-                                        value="chart"
-                                        icon={selectedSection === 'chart' ? <InsertChartIcon /> : <InsertChartOutlinedIcon />}
-                                    />
-                                </BottomNavigation>
-                            </Paper>
+                            <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg">
+                                <div className="flex justify-center">
+                                    <button
+                                        onClick={() => handleSectionChange('table')}
+                                        className={`flex flex-col items-center p-3 ${selectedSection === 'table' ? 'text-blue-600' : 'text-gray-500'}`}
+                                    >
+                                        {selectedSection === 'table' ? <TableChartIcon /> : <TableChartOutlinedIcon />}
+                                        <span className="text-xs mt-1">Table</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleSectionChange('chart')}
+                                        className={`flex flex-col items-center p-3 ${selectedSection === 'chart' ? 'text-blue-600' : 'text-gray-500'}`}
+                                    >
+                                        {selectedSection === 'chart' ? <InsertChartIcon /> : <InsertChartOutlinedIcon />}
+                                        <span className="text-xs mt-1">Chart</span>
+                                    </button>
+                                </div>
+                            </div>
                         </>)
                         :
                         (<>

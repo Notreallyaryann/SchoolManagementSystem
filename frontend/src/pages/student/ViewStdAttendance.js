@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { BottomNavigation, BottomNavigationAction, Box, Button, Collapse, Paper, Table, TableBody, TableHead, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
 import { calculateOverallAttendancePercentage, calculateSubjectAttendancePercentage, groupAttendanceBySubject } from '../../components/attendanceCalculator';
-
 import CustomBarChart from '../../components/CustomBarChart'
-
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
-import { StyledTableCell, StyledTableRow } from '../../components/styles';
 
 const ViewStdAttendance = () => {
     const dispatch = useDispatch();
@@ -57,82 +53,85 @@ const ViewStdAttendance = () => {
         };
     });
 
-    const handleSectionChange = (event, newSection) => {
+    const handleSectionChange = (newSection) => {
         setSelectedSection(newSection);
     };
 
     const renderTableSection = () => {
         return (
             <>
-                <Typography variant="h4" align="center" gutterBottom>
+                <h2 className="text-2xl font-bold text-center mb-4">
                     Attendance
-                </Typography>
-                <Table>
-                    <TableHead>
-                        <StyledTableRow>
-                            <StyledTableCell>Subject</StyledTableCell>
-                            <StyledTableCell>Present</StyledTableCell>
-                            <StyledTableCell>Total Sessions</StyledTableCell>
-                            <StyledTableCell>Attendance Percentage</StyledTableCell>
-                            <StyledTableCell align="center">Actions</StyledTableCell>
-                        </StyledTableRow>
-                    </TableHead>
-                    {Object.entries(attendanceBySubject).map(([subName, { present, allData, subId, sessions }], index) => {
-                        const subjectAttendancePercentage = calculateSubjectAttendancePercentage(present, sessions);
+                </h2>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Present</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Sessions</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attendance Percentage</th>
+                                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        {Object.entries(attendanceBySubject).map(([subName, { present, allData, subId, sessions }], index) => {
+                            const subjectAttendancePercentage = calculateSubjectAttendancePercentage(present, sessions);
 
-                        return (
-                            <TableBody key={index}>
-                                <StyledTableRow>
-                                    <StyledTableCell>{subName}</StyledTableCell>
-                                    <StyledTableCell>{present}</StyledTableCell>
-                                    <StyledTableCell>{sessions}</StyledTableCell>
-                                    <StyledTableCell>{subjectAttendancePercentage}%</StyledTableCell>
-                                    <StyledTableCell align="center">
-                                        <Button variant="contained"
-                                            onClick={() => handleOpen(subId)}>
-                                            {openStates[subId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}Details
-                                        </Button>
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                                <StyledTableRow>
-                                    <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                                        <Collapse in={openStates[subId]} timeout="auto" unmountOnExit>
-                                            <Box sx={{ margin: 1 }}>
-                                                <Typography variant="h6" gutterBottom component="div">
-                                                    Attendance Details
-                                                </Typography>
-                                                <Table size="small" aria-label="purchases">
-                                                    <TableHead>
-                                                        <StyledTableRow>
-                                                            <StyledTableCell>Date</StyledTableCell>
-                                                            <StyledTableCell align="right">Status</StyledTableCell>
-                                                        </StyledTableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {allData.map((data, index) => {
-                                                            const date = new Date(data.date);
-                                                            const dateString = date.toString() !== "Invalid Date" ? date.toISOString().substring(0, 10) : "Invalid Date";
-                                                            return (
-                                                                <StyledTableRow key={index}>
-                                                                    <StyledTableCell component="th" scope="row">
-                                                                        {dateString}
-                                                                    </StyledTableCell>
-                                                                    <StyledTableCell align="right">{data.status}</StyledTableCell>
-                                                                </StyledTableRow>
-                                                            )
-                                                        })}
-                                                    </TableBody>
-                                                </Table>
-                                            </Box>
-                                        </Collapse>
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            </TableBody>
-                        )
-                    }
-                    )}
-                </Table>
-                <div>
+                            return (
+                                <tbody key={index} className="bg-white divide-y divide-gray-200">
+                                    <tr className="hover:bg-gray-50">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{subName}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{present}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{sessions}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{subjectAttendancePercentage}%</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                                            <button 
+                                                onClick={() => handleOpen(subId)}
+                                                className="bg-blue-600 text-white px-3 py-2 rounded flex items-center gap-1"
+                                            >
+                                                {openStates[subId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                                                Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" colSpan={6}>
+                                            <div className={`overflow-hidden transition-all duration-300 ${openStates[subId] ? 'max-h-96' : 'max-h-0'}`}>
+                                                <div className="my-2">
+                                                    <h3 className="text-lg font-semibold mb-2">
+                                                        Attendance Details
+                                                    </h3>
+                                                    <table className="min-w-full divide-y divide-gray-200">
+                                                        <thead className="bg-gray-50">
+                                                            <tr>
+                                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="bg-white divide-y divide-gray-200">
+                                                            {allData.map((data, index) => {
+                                                                const date = new Date(data.date);
+                                                                const dateString = date.toString() !== "Invalid Date" ? date.toISOString().substring(0, 10) : "Invalid Date";
+                                                                return (
+                                                                    <tr key={index} className="hover:bg-gray-50">
+                                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{dateString}</td>
+                                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">{data.status}</td>
+                                                                    </tr>
+                                                                )
+                                                            })}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            )
+                        }
+                        )}
+                    </table>
+                </div>
+                <div className="mt-4 text-lg font-medium">
                     Overall Attendance Percentage: {overallAttendancePercentage.toFixed(2)}%
                 </div>
             </>
@@ -151,35 +150,43 @@ const ViewStdAttendance = () => {
         <>
             {loading
                 ? (
-                    <div>Loading...</div>
+                    <div className="flex justify-center items-center h-64">
+                        <div>Loading...</div>
+                    </div>
                 )
                 :
                 <div>
                     {subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0 ?
                         <>
-                            {selectedSection === 'table' && renderTableSection()}
-                            {selectedSection === 'chart' && renderChartSection()}
+                            <div className="pb-16">
+                                {selectedSection === 'table' && renderTableSection()}
+                                {selectedSection === 'chart' && renderChartSection()}
+                            </div>
 
-                            <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-                                <BottomNavigation value={selectedSection} onChange={handleSectionChange} showLabels>
-                                    <BottomNavigationAction
-                                        label="Table"
-                                        value="table"
-                                        icon={selectedSection === 'table' ? <TableChartIcon /> : <TableChartOutlinedIcon />}
-                                    />
-                                    <BottomNavigationAction
-                                        label="Chart"
-                                        value="chart"
-                                        icon={selectedSection === 'chart' ? <InsertChartIcon /> : <InsertChartOutlinedIcon />}
-                                    />
-                                </BottomNavigation>
-                            </Paper>
+                            <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg">
+                                <div className="flex justify-center">
+                                    <button
+                                        onClick={() => handleSectionChange('table')}
+                                        className={`flex flex-col items-center p-3 ${selectedSection === 'table' ? 'text-blue-600' : 'text-gray-500'}`}
+                                    >
+                                        {selectedSection === 'table' ? <TableChartIcon /> : <TableChartOutlinedIcon />}
+                                        <span className="text-xs mt-1">Table</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleSectionChange('chart')}
+                                        className={`flex flex-col items-center p-3 ${selectedSection === 'chart' ? 'text-blue-600' : 'text-gray-500'}`}
+                                    >
+                                        {selectedSection === 'chart' ? <InsertChartIcon /> : <InsertChartOutlinedIcon />}
+                                        <span className="text-xs mt-1">Chart</span>
+                                    </button>
+                                </div>
+                            </div>
                         </>
                         :
                         <>
-                            <Typography variant="h6" gutterBottom component="div">
+                            <h3 className="text-xl font-semibold mb-4">
                                 Currently You Have No Attendance Details
-                            </Typography>
+                            </h3>
                         </>
                     }
                 </div>

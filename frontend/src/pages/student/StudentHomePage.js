@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Grid, Paper, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import { calculateOverallAttendancePercentage } from '../../components/attendanceCalculator';
 import CustomPieChart from '../../components/CustomPieChart';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
-import styled from 'styled-components';
 import SeeNotice from '../../components/SeeNotice';
 import CountUp from 'react-countup';
 import Subject from "../../assets/subjects.svg";
@@ -41,96 +39,55 @@ const StudentHomePage = () => {
         { name: 'Present', value: overallAttendancePercentage },
         { name: 'Absent', value: overallAbsentPercentage }
     ];
+    
     return (
-        <>
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Subject} alt="Subjects" />
-                            <Title>
-                                Total Subjects
-                            </Title>
-                            <Data start={0} end={numberOfSubjects} duration={2.5} />
-                        </StyledPaper>
-                    </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Assignment} alt="Assignments" />
-                            <Title>
-                                Total Assignments
-                            </Title>
-                            <Data start={0} end={15} duration={4} />
-                        </StyledPaper>
-                    </Grid>
-                    <Grid item xs={12} md={4} lg={3}>
-                        <ChartContainer>
-                            {
-                                response ?
-                                    <Typography variant="h6">No Attendance Found</Typography>
-                                    :
-                                    <>
-                                        {loading
-                                            ? (
-                                                <Typography variant="h6">Loading...</Typography>
-                                            )
-                                            :
-                                            <>
-                                                {
-                                                    subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0 ? (
-                                                        <>
-                                                            <CustomPieChart data={chartData} />
-                                                        </>
-                                                    )
-                                                        :
-                                                        <Typography variant="h6">No Attendance Found</Typography>
-                                                }
-                                            </>
-                                        }
-                                    </>
-                            }
-                        </ChartContainer>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                            <SeeNotice />
-                        </Paper>
-                    </Grid>
-                </Grid>
-            </Container>
-        </>
+        <div className="max-w-7xl mx-auto mt-8 mb-8 px-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="col-span-1">
+                    <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-between h-64">
+                        <img src={Subject} alt="Subjects" className="h-24 w-24 mb-4" />
+                        <p className="text-xl font-medium mb-2">Total Subjects</p>
+                        <CountUp 
+                            start={0} 
+                            end={numberOfSubjects} 
+                            duration={2.5} 
+                            className="text-3xl font-bold text-green-600"
+                        />
+                    </div>
+                </div>
+                <div className="col-span-1">
+                    <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-between h-64">
+                        <img src={Assignment} alt="Assignments" className="h-24 w-24 mb-4" />
+                        <p className="text-xl font-medium mb-2">Total Assignments</p>
+                        <CountUp 
+                            start={0} 
+                            end={15} 
+                            duration={4} 
+                            className="text-3xl font-bold text-green-600"
+                        />
+                    </div>
+                </div>
+                <div className="col-span-1 md:col-span-2 lg:col-span-2">
+                    <div className="bg-white p-2 rounded-lg shadow-md flex flex-col justify-center items-center h-64 text-center">
+                        {response ? (
+                            <p className="text-lg font-medium">No Attendance Found</p>
+                        ) : loading ? (
+                            <p className="text-lg font-medium">Loading...</p>
+                        ) : subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0 ? (
+                            <CustomPieChart data={chartData} />
+                        ) : (
+                            <p className="text-lg font-medium">No Attendance Found</p>
+                        )}
+                    </div>
+                </div>
+                <div className="col-span-1 md:col-span-2 lg:col-span-4">
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <SeeNotice />
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
 
-const ChartContainer = styled.div`
-  padding: 2px;
-  display: flex;
-  flex-direction: column;
-  height: 240px;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-`;
-
-const StyledPaper = styled(Paper)`
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  height: 200px;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-`;
-
-const Title = styled.p`
-  font-size: 1.25rem;
-`;
-
-const Data = styled(CountUp)`
-  font-size: calc(1.3rem + .6vw);
-  color: green;
-`;
-
-
-
-export default StudentHomePage
+export default StudentHomePage;

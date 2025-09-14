@@ -42,8 +42,7 @@ const studentLogIn = async (req, res) => {
                 student = await student.populate("school", "schoolName")
                 student = await student.populate("sclassName", "sclassName")
                 student.password = undefined;
-                student.examResult = undefined;
-                student.attendance = undefined;
+             
                 res.send(student);
             } else {
                 res.send({ message: "Invalid password" });

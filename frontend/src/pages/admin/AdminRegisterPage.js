@@ -2,26 +2,19 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, Box, Typography, Paper, Checkbox, FormControlLabel, TextField, CssBaseline, IconButton, InputAdornment, CircularProgress} from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import bgpic from "../../assets/designlogin.jpg"
-import { LightPurpleButton } from '../../components/buttonStyles';
+import bgpic from "../../assets/designlogin.jpg";
 import { registerUser } from '../../redux/userRelated/userHandle';
-import styled from 'styled-components';
 import Popup from '../../components/Popup';
 
-const defaultTheme = createTheme();
-
 const AdminRegisterPage = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+    const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);
 
-    const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);;
-
-    const [toggle, setToggle] = useState(false)
-    const [loader, setLoader] = useState(false)
+    const [toggle, setToggle] = useState(false);
+    const [loader, setLoader] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -29,7 +22,7 @@ const AdminRegisterPage = () => {
     const [passwordError, setPasswordError] = useState(false);
     const [adminNameError, setAdminNameError] = useState(false);
     const [schoolNameError, setSchoolNameError] = useState(false);
-    const role = "Admin"
+    const role = "Admin";
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -47,9 +40,9 @@ const AdminRegisterPage = () => {
             return;
         }
 
-        const fields = { name, email, password, role, schoolName }
-        setLoader(true)
-        dispatch(registerUser(fields, role))
+        const fields = { name, email, password, role, schoolName };
+        setLoader(true);
+        dispatch(registerUser(fields, role));
     };
 
     const handleInputChange = (event) => {
@@ -63,155 +56,134 @@ const AdminRegisterPage = () => {
     useEffect(() => {
         if (status === 'success' || (currentUser !== null && currentRole === 'Admin')) {
             navigate('/Admin/dashboard');
-        }
-        else if (status === 'failed') {
-            setMessage(response)
-            setShowPopup(true)
-            setLoader(false)
-        }
-        else if (status === 'error') {
-            console.log(error)
+        } else if (status === 'failed') {
+            setMessage(response);
+            setShowPopup(true);
+            setLoader(false);
+        } else if (status === 'error') {
+            console.log(error);
         }
     }, [status, currentUser, currentRole, navigate, error, response]);
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Grid container component="main" sx={{ height: '100vh' }}>
-                <CssBaseline />
-                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                    <Box
-                        sx={{
-                            my: 8,
-                            mx: 4,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Typography variant="h4" sx={{ mb: 2, color: "#2c2143" }}>
-                            Admin Register
-                        </Typography>
-                        <Typography variant="h7">
-                            Create your own school by registering as an admin.
-                            <br />
-                            You will be able to add students and faculty and
-                            manage the system.
-                        </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 2 }}>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
+        <div className="flex h-screen">
+            <div className="flex flex-col w-full md:w-1/2 p-8 overflow-y-auto">
+                <div className="my-8 mx-4 flex flex-col items-center">
+                    <h2 className="text-3xl font-bold mb-4 text-[#2c2143]">
+                        Admin Register
+                    </h2>
+                    <p className="text-center mb-6">
+                        Create your own school by registering as an admin.
+                        <br />
+                        You will be able to add students and faculty and
+                        manage the system.
+                    </p>
+                    <form className="w-full mt-2" onSubmit={handleSubmit}>
+                        <div className="mb-4">
+                            <label htmlFor="adminName" className="block text-sm font-medium text-gray-700 mb-1">
+                                Enter your name
+                            </label>
+                            <input
+                                type="text"
                                 id="adminName"
-                                label="Enter your name"
                                 name="adminName"
                                 autoComplete="name"
-                                autoFocus
-                                error={adminNameError}
-                                helperText={adminNameError && 'Name is required'}
+                                className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 ${adminNameError ? 'border-red-500' : 'border-gray-300'}`}
                                 onChange={handleInputChange}
-                            />
-                            <TextField
-                                margin="normal"
                                 required
-                                fullWidth
+                            />
+                            {adminNameError && <p className="mt-1 text-sm text-red-600">Name is required</p>}
+                        </div>
+                        <div className="mb-4">
+                            <label htmlFor="schoolName" className="block text-sm font-medium text-gray-700 mb-1">
+                                Create your school name
+                            </label>
+                            <input
+                                type="text"
                                 id="schoolName"
-                                label="Create your school name"
                                 name="schoolName"
                                 autoComplete="off"
-                                error={schoolNameError}
-                                helperText={schoolNameError && 'School name is required'}
+                                className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 ${schoolNameError ? 'border-red-500' : 'border-gray-300'}`}
                                 onChange={handleInputChange}
-                            />
-                            <TextField
-                                margin="normal"
                                 required
-                                fullWidth
+                            />
+                            {schoolNameError && <p className="mt-1 text-sm text-red-600">School name is required</p>}
+                        </div>
+                        <div className="mb-4">
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                                Enter your email
+                            </label>
+                            <input
+                                type="email"
                                 id="email"
-                                label="Enter your email"
                                 name="email"
                                 autoComplete="email"
-                                error={emailError}
-                                helperText={emailError && 'Email is required'}
+                                className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 ${emailError ? 'border-red-500' : 'border-gray-300'}`}
                                 onChange={handleInputChange}
-                            />
-                            <TextField
-                                margin="normal"
                                 required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type={toggle ? 'text' : 'password'}
-                                id="password"
-                                autoComplete="current-password"
-                                error={passwordError}
-                                helperText={passwordError && 'Password is required'}
-                                onChange={handleInputChange}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton onClick={() => setToggle(!toggle)}>
-                                                {toggle ? (
-                                                    <Visibility />
-                                                ) : (
-                                                    <VisibilityOff />
-                                                )}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
                             />
-                            <Grid container sx={{ display: "flex", justifyContent: "space-between" }}>
-                                <FormControlLabel
-                                    control={<Checkbox value="remember" color="primary" />}
-                                    label="Remember me"
+                            {emailError && <p className="mt-1 text-sm text-red-600">Email is required</p>}
+                        </div>
+                        <div className="mb-4">
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                                Password
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type={toggle ? 'text' : 'password'}
+                                    id="password"
+                                    name="password"
+                                    autoComplete="current-password"
+                                    className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 ${passwordError ? 'border-red-500' : 'border-gray-300'}`}
+                                    onChange={handleInputChange}
+                                    required
                                 />
-                            </Grid>
-                            <LightPurpleButton
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
+                                <button
+                                    type="button"
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                    onClick={() => setToggle(!toggle)}
+                                >
+                                    {toggle ? <Visibility /> : <VisibilityOff />}
+                                </button>
+                            </div>
+                            {passwordError && <p className="mt-1 text-sm text-red-600">Password is required</p>}
+                        </div>
+                        <div className="flex justify-between items-center mb-6">
+                            <label className="flex items-center">
+                                <input type="checkbox" className="form-checkbox text-purple-600" />
+                                <span className="ml-2 text-sm text-gray-700">Remember me</span>
+                            </label>
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition-colors flex justify-center items-center"
+                            disabled={loader}
+                        >
+                            {loader ? (
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                            ) : (
+                                "Register"
+                            )}
+                        </button>
+                        <div className="mt-4 flex justify-center">
+                            <span className="text-sm text-gray-700">Already have an account?</span>
+                            <Link
+                                to="/Adminlogin"
+                                className="ml-2 text-sm text-purple-600 hover:text-purple-800"
                             >
-                                {loader ? <CircularProgress size={24} color="inherit"/> : "Register"}
-                            </LightPurpleButton>
-                            <Grid container>
-                                <Grid>
-                                    Already have an account?
-                                </Grid>
-                                <Grid item sx={{ ml: 2 }}>
-                                    <StyledLink to="/Adminlogin">
-                                        Log in
-                                    </StyledLink>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    </Box>
-                </Grid>
-                <Grid
-                    item
-                    xs={false}
-                    sm={4}
-                    md={7}
-                    sx={{
-                        backgroundImage: `url(${bgpic})`,
-                        backgroundRepeat: 'no-repeat',
-                        backgroundColor: (t) =>
-                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                />
-            </Grid>
+                                Log in
+                            </Link>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div
+                className="hidden md:block w-1/2 bg-cover bg-center"
+                style={{ backgroundImage: `url(${bgpic})` }}
+            ></div>
             <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
-        </ThemeProvider>
+        </div>
     );
-}
+};
 
-export default AdminRegisterPage
-
-const StyledLink = styled(Link)`
-  margin-top: 9px;
-  text-decoration: none;
-  color: #7f56da;
-`;
+export default AdminRegisterPage;

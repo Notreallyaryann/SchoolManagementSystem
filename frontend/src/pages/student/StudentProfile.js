@@ -72,7 +72,7 @@ const StudentProfile = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" component="p">
-                  <strong>Email:</strong> john.doe@example.com
+                  <strong>Email:</strong> student@example.com
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -82,12 +82,12 @@ const StudentProfile = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" component="p">
-                  <strong>Address:</strong> 123 Main Street, City, Country
+                  <strong>Address:</strong> kanpur
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" component="p">
-                  <strong>Emergency Contact:</strong> (987) 654-3210
+                  <strong>Emergency Contact:</strong> (999) 999-9999
                 </Typography>
               </Grid>
             </Grid>

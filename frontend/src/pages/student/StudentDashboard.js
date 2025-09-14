@@ -1,13 +1,4 @@
 import { useState } from 'react';
-import {
-    CssBaseline,
-    Box,
-    Toolbar,
-    List,
-    Typography,
-    Divider,
-    IconButton,
-} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import StudentSideBar from './StudentSideBar';
@@ -17,9 +8,8 @@ import StudentProfile from './StudentProfile';
 import StudentSubjects from './StudentSubjects';
 import ViewStdAttendance from './ViewStdAttendance';
 import StudentComplain from './StudentComplain';
-import Logout from '../Logout'
+import Logout from '../Logout';
 import AccountMenu from '../../components/AccountMenu';
-import { AppBar, Drawer } from '../../components/styles';
 
 const StudentDashboard = () => {
     const [open, setOpen] = useState(true);
@@ -29,90 +19,56 @@ const StudentDashboard = () => {
 
     return (
         <>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <AppBar open={open} position='absolute'>
-                    <Toolbar sx={{ pr: '24px' }}>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
+            <div className="flex h-screen bg-gray-100">
+                {/* AppBar */}
+                <header className={`fixed w-full bg-blue-600 text-white z-10 transition-all duration-300 ${open ? 'md:pl-64' : ''}`}>
+                    <div className="flex items-center justify-between p-4">
+                        <button
+                            className="text-white mr-10 md:mr-36 focus:outline-none"
                             onClick={toggleDrawer}
-                            sx={{
-                                marginRight: '36px',
-                                ...(open && { display: 'none' }),
-                            }}
+                            style={{ display: open ? 'none' : 'block' }}
                         >
                             <MenuIcon />
-                        </IconButton>
-                        <Typography
-                            component="h1"
-                            variant="h6"
-                            color="inherit"
-                            noWrap
-                            sx={{ flexGrow: 1 }}
-                        >
-                            Student Dashboard
-                        </Typography>
+                        </button>
+                        <h1 className="text-xl font-semibold flex-grow">Student Dashboard</h1>
                         <AccountMenu />
-                    </Toolbar>
-                </AppBar>
-                <Drawer variant="permanent" open={open} sx={open ? styles.drawerStyled : styles.hideDrawer}>
-                    <Toolbar sx={styles.toolBarStyled}>
-                        <IconButton onClick={toggleDrawer}>
+                    </div>
+                </header>
+
+                {/* Sidebar */}
+                <aside className={`fixed top-0 left-0 z-20 h-full bg-white shadow-lg transition-all duration-300 ${open ? 'w-64' : 'w-0 md:w-20'} overflow-x-hidden`}>
+                    <div className="flex items-center justify-end p-2">
+                        <button 
+                            className="text-gray-500 focus:outline-none"
+                            onClick={toggleDrawer}
+                        >
                             <ChevronLeftIcon />
-                        </IconButton>
-                    </Toolbar>
-                    <Divider />
-                    <List component="nav">
+                        </button>
+                    </div>
+                    <hr className="my-2" />
+                    <nav>
                         <StudentSideBar />
-                    </List>
-                </Drawer>
-                <Box component="main" sx={styles.boxStyled}>
-                    <Toolbar />
-                    <Routes>
-                        <Route path="/" element={<StudentHomePage />} />
-                        <Route path='*' element={<Navigate to="/" />} />
-                        <Route path="/Student/dashboard" element={<StudentHomePage />} />
-                        <Route path="/Student/profile" element={<StudentProfile />} />
+                    </nav>
+                </aside>
 
-                        <Route path="/Student/subjects" element={<StudentSubjects />} />
-                        <Route path="/Student/attendance" element={<ViewStdAttendance />} />
-                        <Route path="/Student/complain" element={<StudentComplain />} />
-
-                        <Route path="/logout" element={<Logout />} />
-                    </Routes>
-                </Box>
-            </Box>
+                {/* Main content */}
+                <main className={`flex-1 overflow-auto transition-all duration-300 ${open ? 'md:ml-64' : 'md:ml-20'}`}>
+                    <div className="p-6 mt-16">
+                        <Routes>
+                            <Route path="/" element={<StudentHomePage />} />
+                            <Route path='*' element={<Navigate to="/" />} />
+                            <Route path="/Student/dashboard" element={<StudentHomePage />} />
+                            <Route path="/Student/profile" element={<StudentProfile />} />
+                            <Route path="/Student/subjects" element={<StudentSubjects />} />
+                            <Route path="/Student/attendance" element={<ViewStdAttendance />} />
+                            <Route path="/Student/complain" element={<StudentComplain />} />
+                            <Route path="/logout" element={<Logout />} />
+                        </Routes>
+                    </div>
+                </main>
+            </div>
         </>
     );
 }
 
-export default StudentDashboard
-
-const styles = {
-    boxStyled: {
-        backgroundColor: (theme) =>
-            theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-        flexGrow: 1,
-        height: '100vh',
-        overflow: 'auto',
-    },
-    toolBarStyled: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        px: [1],
-    },
-    drawerStyled: {
-        display: "flex"
-    },
-    hideDrawer: {
-        display: 'flex',
-        '@media (max-width: 600px)': {
-            display: 'none',
-        },
-    },
-}
+export default StudentDashboard;

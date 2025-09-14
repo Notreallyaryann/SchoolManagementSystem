@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Divider, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 
 import HomeIcon from "@mui/icons-material/Home";
@@ -14,72 +13,138 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const SideBar = () => {
     const location = useLocation();
-    return (
-        <>
-            <React.Fragment>
-                <ListItemButton component={Link} to="/">
-                    <ListItemIcon>
-                        <HomeIcon color={location.pathname === ("/" || "/Admin/dashboard") ? 'primary' : 'inherit'} />
-                    </ListItemIcon>
-                    <ListItemText primary="Home" />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/Admin/classes">
-                    <ListItemIcon>
-                        <ClassOutlinedIcon color={location.pathname.startsWith('/Admin/classes') ? 'primary' : 'inherit'} />
-                    </ListItemIcon>
-                    <ListItemText primary="Classes" />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/Admin/subjects">
-                    <ListItemIcon>
-                        <AssignmentIcon color={location.pathname.startsWith("/Admin/subjects") ? 'primary' : 'inherit'} />
-                    </ListItemIcon>
-                    <ListItemText primary="Subjects" />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/Admin/teachers">
-                    <ListItemIcon>
-                        <SupervisorAccountOutlinedIcon color={location.pathname.startsWith("/Admin/teachers") ? 'primary' : 'inherit'} />
-                    </ListItemIcon>
-                    <ListItemText primary="Teachers" />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/Admin/students">
-                    <ListItemIcon>
-                        <PersonOutlineIcon color={location.pathname.startsWith("/Admin/students") ? 'primary' : 'inherit'} />
-                    </ListItemIcon>
-                    <ListItemText primary="Students" />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/Admin/notices">
-                    <ListItemIcon>
-                        <AnnouncementOutlinedIcon color={location.pathname.startsWith("/Admin/notices") ? 'primary' : 'inherit'} />
-                    </ListItemIcon>
-                    <ListItemText primary="Notices" />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/Admin/complains">
-                    <ListItemIcon>
-                        <ReportIcon color={location.pathname.startsWith("/Admin/complains") ? 'primary' : 'inherit'} />
-                    </ListItemIcon>
-                    <ListItemText primary="Complains" />
-                </ListItemButton>
-            </React.Fragment>
-            <Divider sx={{ my: 1 }} />
-            <React.Fragment>
-                <ListSubheader component="div" inset>
-                    User
-                </ListSubheader>
-                <ListItemButton component={Link} to="/Admin/profile">
-                    <ListItemIcon>
-                        <AccountCircleOutlinedIcon color={location.pathname.startsWith("/Admin/profile") ? 'primary' : 'inherit'} />
-                    </ListItemIcon>
-                    <ListItemText primary="Profile" />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/logout">
-                    <ListItemIcon>
-                        <ExitToAppIcon color={location.pathname.startsWith("/logout") ? 'primary' : 'inherit'} />
-                    </ListItemIcon>
-                    <ListItemText primary="Logout" />
-                </ListItemButton>
-            </React.Fragment>
-        </>
-    )
-}
+    
+    // Helper function to determine if a link is active
+    const isActiveLink = (path) => {
+        if (path === "/") {
+            return location.pathname === "/" || location.pathname === "/Admin/dashboard";
+        }
+        return location.pathname.startsWith(path);
+    };
 
-export default SideBar
+    return (
+        <div className="w-64 bg-white shadow-md h-full flex flex-col">
+            <div className="flex-1 overflow-y-auto py-4">
+                <div className="space-y-1">
+                    <Link
+                        to="/"
+                        className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
+                            isActiveLink("/") 
+                            ? "text-blue-600 bg-blue-50 border-r-4 border-blue-600" 
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                    >
+                        <HomeIcon className={`mr-3 ${isActiveLink("/") ? "text-blue-600" : "text-gray-500"}`} />
+                        <span>Home</span>
+                    </Link>
+                    
+                    <Link
+                        to="/Admin/classes"
+                        className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
+                            isActiveLink("/Admin/classes") 
+                            ? "text-blue-600 bg-blue-50 border-r-4 border-blue-600" 
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                    >
+                        <ClassOutlinedIcon className={`mr-3 ${isActiveLink("/Admin/classes") ? "text-blue-600" : "text-gray-500"}`} />
+                        <span>Classes</span>
+                    </Link>
+                    
+                    <Link
+                        to="/Admin/subjects"
+                        className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
+                            isActiveLink("/Admin/subjects") 
+                            ? "text-blue-600 bg-blue-50 border-r-4 border-blue-600" 
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                    >
+                        <AssignmentIcon className={`mr-3 ${isActiveLink("/Admin/subjects") ? "text-blue-600" : "text-gray-500"}`} />
+                        <span>Subjects</span>
+                    </Link>
+                    
+                    <Link
+                        to="/Admin/teachers"
+                        className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
+                            isActiveLink("/Admin/teachers") 
+                            ? "text-blue-600 bg-blue-50 border-r-4 border-blue-600" 
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                    >
+                        <SupervisorAccountOutlinedIcon className={`mr-3 ${isActiveLink("/Admin/teachers") ? "text-blue-600" : "text-gray-500"}`} />
+                        <span>Teachers</span>
+                    </Link>
+                    
+                    <Link
+                        to="/Admin/students"
+                        className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
+                            isActiveLink("/Admin/students") 
+                            ? "text-blue-600 bg-blue-50 border-r-4 border-blue-600" 
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                    >
+                        <PersonOutlineIcon className={`mr-3 ${isActiveLink("/Admin/students") ? "text-blue-600" : "text-gray-500"}`} />
+                        <span>Students</span>
+                    </Link>
+                    
+                    <Link
+                        to="/Admin/notices"
+                        className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
+                            isActiveLink("/Admin/notices") 
+                            ? "text-blue-600 bg-blue-50 border-r-4 border-blue-600" 
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                    >
+                        <AnnouncementOutlinedIcon className={`mr-3 ${isActiveLink("/Admin/notices") ? "text-blue-600" : "text-gray-500"}`} />
+                        <span>Notices</span>
+                    </Link>
+                    
+                    <Link
+                        to="/Admin/complains"
+                        className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
+                            isActiveLink("/Admin/complains") 
+                            ? "text-blue-600 bg-blue-50 border-r-4 border-blue-600" 
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                    >
+                        <ReportIcon className={`mr-3 ${isActiveLink("/Admin/complains") ? "text-blue-600" : "text-gray-500"}`} />
+                        <span>Complains</span>
+                    </Link>
+                </div>
+            </div>
+            
+            <div className="border-t border-gray-200 pt-4 pb-2">
+                <div className="px-4 mb-2">
+                    <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">User</h3>
+                </div>
+                
+                <div className="space-y-1">
+                    <Link
+                        to="/Admin/profile"
+                        className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
+                            isActiveLink("/Admin/profile") 
+                            ? "text-blue-600 bg-blue-50 border-r-4 border-blue-600" 
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                    >
+                        <AccountCircleOutlinedIcon className={`mr-3 ${isActiveLink("/Admin/profile") ? "text-blue-600" : "text-gray-500"}`} />
+                        <span>Profile</span>
+                    </Link>
+                    
+                    <Link
+                        to="/logout"
+                        className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
+                            isActiveLink("/logout") 
+                            ? "text-blue-600 bg-blue-50 border-r-4 border-blue-600" 
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                    >
+                        <ExitToAppIcon className={`mr-3 ${isActiveLink("/logout") ? "text-blue-600" : "text-gray-500"}`} />
+                        <span>Logout</span>
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default SideBar;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { calculateOverallAttendancePercentage } from '../../components/attendanceCalculator';
 import CustomPieChart from '../../components/CustomPieChart';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
 import SeeNotice from '../../components/SeeNotice';
@@ -9,6 +8,29 @@ import Subject from "../../assets/subjects.svg";
 import Assignment from "../../assets/assignment.svg";
 import { getSubjectList } from '../../redux/sclassRelated/sclassHandle';
 
+
+const calculateOverallAttendancePercentage = (attendanceData) => {
+    if (!attendanceData || !Array.isArray(attendanceData)) {
+        return 0;
+    }
+    
+    let totalPresent = 0;
+    let totalClasses = 0;
+    
+    attendanceData.forEach(attendance => {
+        if (attendance && typeof attendance.present === 'number' && typeof attendance.totalClasses === 'number') {
+            totalPresent += attendance.present;
+            totalClasses += attendance.totalClasses;
+        }
+    });
+    
+    if (totalClasses === 0) {
+        return 0;
+    }
+    
+    return (totalPresent / totalClasses) * 100;
+};
+
 const StudentHomePage = () => {
     const dispatch = useDispatch();
 
@@ -16,19 +38,34 @@ const StudentHomePage = () => {
     const { subjectsList } = useSelector((state) => state.sclass);
 
     const [subjectAttendance, setSubjectAttendance] = useState([]);
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
 
-    const classID = currentUser.sclassName._id
+
+    const classID = currentUser?.sclassName?._id;
+    const schoolID = currentUser?.school?._id;
 
     useEffect(() => {
-        dispatch(getUserDetails(currentUser._id, "Student"));
-        dispatch(getSubjectList(classID, "ClassSubjects"));
-    }, [dispatch, currentUser._id, classID]);
+        if (currentUser?._id) {
+            dispatch(getUserDetails(currentUser._id, "Student"));
+        }
+    }, [dispatch, currentUser?._id]);
 
-    const numberOfSubjects = subjectsList && subjectsList.length;
+    useEffect(() => {
+        if (classID) {
+            dispatch(getSubjectList(classID, "ClassSubjects"));
+        }
+    }, [dispatch, classID]);
+
+    const numberOfSubjects = subjectsList ? subjectsList.length : 0;
 
     useEffect(() => {
         if (userDetails) {
-            setSubjectAttendance(userDetails.attendance || []);
+            // ✅ Filter out any attendance records with null subName
+            const validAttendance = (userDetails.attendance || []).filter(
+                att => att && att.subName !== null && att.subName !== undefined
+            );
+            setSubjectAttendance(validAttendance);
+            setIsDataLoaded(true);
         }
     }, [userDetails])
 
@@ -40,6 +77,11 @@ const StudentHomePage = () => {
         { name: 'Absent', value: overallAbsentPercentage }
     ];
     
+
+    if (loading || !isDataLoaded) {
+        return <div className="flex justify-center items-center h-64">Loading...</div>;
+    }
+
     return (
         <div className="max-w-7xl mx-auto mt-8 mb-8 px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -71,8 +113,6 @@ const StudentHomePage = () => {
                     <div className="bg-white p-2 rounded-lg shadow-md flex flex-col justify-center items-center h-64 text-center">
                         {response ? (
                             <p className="text-lg font-medium">No Attendance Found</p>
-                        ) : loading ? (
-                            <p className="text-lg font-medium">Loading...</p>
                         ) : subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0 ? (
                             <CustomPieChart data={chartData} />
                         ) : (
@@ -82,7 +122,8 @@ const StudentHomePage = () => {
                 </div>
                 <div className="col-span-1 md:col-span-2 lg:col-span-4">
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <SeeNotice />
+                  
+                        {schoolID && <SeeNotice schoolID={schoolID} />}
                     </div>
                 </div>
             </div>

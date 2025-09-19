@@ -27,6 +27,10 @@ const studentSchema = new mongoose.Schema({
         type: String,
         default: "Student"
     },
+    qrCode: {   
+        type: String,   // Base64 QR code string store hoga
+        default: ""
+    },
     examResult: [
         {
             subName: {
@@ -57,4 +61,5 @@ const studentSchema = new mongoose.Schema({
     }]
 });
 
-module.exports = mongoose.model("student", studentSchema);
+
+module.exports = mongoose.models.student || mongoose.model("student", studentSchema);

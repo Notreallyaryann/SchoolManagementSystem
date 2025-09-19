@@ -64,27 +64,6 @@ const LoginPage = ({ role }) => {
         if (name === 'studentName') setStudentNameError(false);
     };
 
-    const guestModeHandler = () => {
-        const password = "zxc";
-
-        if (role === "Admin") {
-            const email = "yogendra@12";
-            const fields = { email, password };
-            setGuestLoader(true);
-            dispatch(loginUser(fields, role));
-        } else if (role === "Student") {
-            const rollNum = "1";
-            const studentName = "Dipesh Awasthi";
-            const fields = { rollNum, studentName, password };
-            setGuestLoader(true);
-            dispatch(loginUser(fields, role));
-        } else if (role === "Teacher") {
-            const email = "tony@12";
-            const fields = { email, password };
-            setGuestLoader(true);
-            dispatch(loginUser(fields, role));
-        }
-    };
 
     useEffect(() => {
         if (status === 'success' || currentUser !== null) {
@@ -197,13 +176,7 @@ const LoginPage = ({ role }) => {
                                 </div>
                             ) : "Login"}
                         </button>
-                        <button
-                            type="button"
-                            onClick={guestModeHandler}
-                            className="w-full mt-4 border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-medium py-3 px-4 rounded-md transition-colors"
-                        >
-                            Login as Guest
-                        </button>
+                     
                         {role === "Admin" && (
                             <div className="mt-4 flex justify-center">
                                 <span className="text-gray-600">Don't have an account?</span>

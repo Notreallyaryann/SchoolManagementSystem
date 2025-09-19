@@ -1,46 +1,47 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Students from "../assets/students.svg";
+import Students from "../assets/students.png";
 
 const Homepage = () => {
     return (
-        <div className="flex justify-center items-center min-h-screen p-4">
-            <div className="flex flex-col md:flex-row w-full max-w-6xl">
-                <div className="w-full md:w-1/2 mb-8 md:mb-0">
-                    <img src={Students} alt="students" className="w-full h-auto" />
+        <div className="flex justify-center items-center min-h-screen p-6 bg-gradient-to-r from-purple-100 via-white to-purple-50">
+            <div className="flex flex-col md:flex-row w-full max-w-6xl bg-white shadow-2xl rounded-2xl overflow-hidden">
+                
+                {/* Left Side Image */}
+                <div className="w-full md:w-1/2">
+                    <img src={Students} alt="students" className="w-full h-full object-cover" />
                 </div>
-                <div className="w-full md:w-1/2 flex items-center justify-center">
-                    <div className="p-6 w-full max-w-md">
-                        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-4">
+
+                {/* Right Side Content */}
+                <div className="w-full md:w-1/2 flex items-center justify-center p-10">
+                    <div className="max-w-md">
+                        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
                             Welcome to
-                            <br />
-                            School Management
-                            <br />
-                            System
+                            <span className="text-purple-600"> School Management</span> System
                         </h1>
-                        <p className="text-gray-600 mt-8 mb-8 leading-relaxed">
-                            Streamline school management, class organization, and add students and faculty.
-                            Seamlessly track attendance, assess performance, and provide feedback.
-                            Access records, view marks, and communicate effortlessly.
+                        <p className="text-gray-600 mb-8 leading-relaxed text-lg">
+                            Simplify school management, organize classes, track attendance, evaluate performance,
+                            and communicate effortlessly with faculty and students.
                         </p>
-                        <div className="flex flex-col items-center gap-4 p-6">
+
+                        {/* Buttons */}
+                        <div className="flex flex-col gap-4">
                             <Link to="/choose" className="w-full">
-                                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-4 rounded-md transition-colors duration-200">
+                                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md transform hover:scale-105 transition duration-300">
                                     Login
                                 </button>
                             </Link>
-                            <Link to="/chooseasguest" className="w-full">
-                                <button className="w-full border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-medium py-3 px-4 rounded-md transition-colors duration-200 mt-2 mb-3">
-                                    Login as Guest
-                                </button>
-                            </Link>
-                            <p className="text-gray-600">
-                                Don't have an account?{' '}
-                                <Link to="/Adminregister" className="text-purple-800 hover:text-purple-900 font-medium">
-                                    Sign up
-                                </Link>
-                            </p>
+
+                      
                         </div>
+
+                        {/* Sign up link */}
+                        <p className="text-gray-700 mt-6 text-center">
+                            Don’t have an account?{' '}
+                            <Link to="/Adminregister" className="text-purple-700 hover:text-purple-900 font-semibold underline">
+                                Sign up
+                            </Link>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -49,3 +50,4 @@ const Homepage = () => {
 };
 
 export default Homepage;
+

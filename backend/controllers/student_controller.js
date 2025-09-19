@@ -1,37 +1,46 @@
 const bcrypt = require('bcrypt');
 const Student = require('../models/studentSchema.js');
-const Subject = require('../models/subjectSchema.js');
+const QRCode = require("qrcode");
 
 const studentRegister = async (req, res) => {
-    try {
-        const salt = await bcrypt.genSalt(10);
-        const hashedPass = await bcrypt.hash(req.body.password, salt);
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(req.body.password, salt);
 
-        const existingStudent = await Student.findOne({
-            rollNum: req.body.rollNum,
-            school: req.body.adminID,
-            sclassName: req.body.sclassName,
-        });
+    // Check if student already exists
+    const existingStudent = await Student.findOne({
+      rollNum: req.body.rollNum,
+      school: req.body.adminID,
+      sclassName: req.body.sclassName,
+    });
 
-        if (existingStudent) {
-            res.send({ message: 'Roll Number already exists' });
-        }
-        else {
-            const student = new Student({
-                ...req.body,
-                school: req.body.adminID,
-                password: hashedPass
-            });
-
-            let result = await student.save();
-
-            result.password = undefined;
-            res.send(result);
-        }
-    } catch (err) {
-        res.status(500).json(err);
+    if (existingStudent) {
+      return res.send({ message: "Roll Number already exists" });
     }
+
+    // Generate QR data string
+    const qrData = `Name: ${req.body.name}, Roll: ${req.body.rollNum}, Class: ${req.body.sclassName}, School: ${req.body.adminID}`;
+    const qrImage = await QRCode.toDataURL(qrData);
+
+    // Create student with QR directly
+    const student = new Student({
+      ...req.body,
+      school: req.body.adminID,
+      password: hashedPass,
+      qrCode: qrImage,  
+    });
+
+    let result = await student.save();
+
+    result.password = undefined;
+    res.send(result);
+
+  } catch (err) {
+    console.error("Student Register Error:", err);
+    res.status(500).json(err);
+  }
 };
+
 
 const studentLogIn = async (req, res) => {
     try {

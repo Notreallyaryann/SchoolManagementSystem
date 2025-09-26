@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
 const Student = require('../models/studentSchema.js');
 const Subject = require('../models/subjectSchema.js');
+const Admin = require('../models/adminSchema.js');
 const QRCode = require("qrcode");
 
+ 
 // ---------------- Register ----------------
 const studentRegister = async (req, res) => {
   try {
@@ -42,10 +44,18 @@ const studentRegister = async (req, res) => {
   }
 };
 
+
+
 // ---------------- Login ----------------
 const studentLogIn = async (req, res) => {
   try {
-    let student = await Student.findOne({ rollNum: req.body.rollNum, name: req.body.studentName });
+  
+    let student = await Student.findOne({ 
+      rollNum: req.body.rollNum, 
+      name: req.body.studentName,
+      school: req.body.schoolId  
+    });
+
     if (student) {
       const validated = await bcrypt.compare(req.body.password, student.password);
       if (validated) {
@@ -63,6 +73,7 @@ const studentLogIn = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
 
 // ---------------- Get Students ----------------
 const getStudents = async (req, res) => {
@@ -206,7 +217,8 @@ const studentAttendance = async (req, res) => {
     );
 
     if (existingAttendance) {
-      existingAttendance.status = status;
+      // Attendance already exists for this date & subject
+      return res.send({ message: 'Attendance Already Marked', existingAttendance });
     } else {
       const attendedSessions = student.attendance.filter(
         (a) => a.subName.toString() === subName
@@ -226,6 +238,8 @@ const studentAttendance = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
+module.exports = { studentAttendance };
 
 const clearAllStudentsAttendanceBySubject = async (req, res) => {
   const subName = req.params.id;
@@ -287,6 +301,22 @@ const removeStudentAttendance = async (req, res) => {
   }
 };
 
+
+
+
+//get schools
+const getAllSchools = async (req, res) => {
+    try {
+        const schools = await Admin.find({}, '_id schoolName'); // only _id and schoolName
+        res.status(200).json(schools);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching schools', error: err.message });
+    }
+};
+
+
+
+
 module.exports = {
   studentRegister,
   studentLogIn,
@@ -302,4 +332,5 @@ module.exports = {
   clearAllStudentsAttendance,
   removeStudentAttendanceBySubject,
   removeStudentAttendance,
+  getAllSchools
 };

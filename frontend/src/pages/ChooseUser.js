@@ -19,7 +19,7 @@ const ChooseUser = ({ visitor }) => {
   const navigateHandler = (user) => {
     if (user === "Admin") {
       if (visitor === "guest") {
-        const email = "yogendra@12";
+        const email = "aryan@12";
         const fields = { email, password };
         setLoader(true);
         dispatch(loginUser(fields, user));
@@ -61,8 +61,8 @@ const ChooseUser = ({ visitor }) => {
   }, [status, currentRole, navigate, currentUser]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-purple-900 to-indigo-900 p-6">
-      <h1 className="text-4xl font-bold text-white mb-10 text-center">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black to-blue-900 p-6">
+      <h1 className="text-4xl font-bold text-blue-400 mb-10 text-center">
         Choose Your Role
       </h1>
 
@@ -70,12 +70,12 @@ const ChooseUser = ({ visitor }) => {
         {/* Admin Card */}
         <div
           onClick={() => navigateHandler("Admin")}
-          className="bg-indigo-800 text-white p-8 rounded-xl shadow-lg transform transition hover:scale-105 hover:bg-indigo-700 cursor-pointer"
+          className="bg-black text-blue-400 p-8 rounded-xl shadow-lg transform transition hover:scale-105 hover:bg-blue-800 cursor-pointer"
         >
           <div className="flex flex-col items-center">
-            <FaUserShield className="text-6xl mb-4" />
+            <FaUserShield className="text-6xl mb-4 text-blue-500" />
             <h2 className="text-2xl font-semibold mb-2">Admin</h2>
-            <p className="text-center text-sm text-gray-200">
+            <p className="text-center text-sm text-blue-200">
               Login as an administrator to manage the app's data and dashboards.
             </p>
           </div>
@@ -84,12 +84,12 @@ const ChooseUser = ({ visitor }) => {
         {/* Student Card */}
         <div
           onClick={() => navigateHandler("Student")}
-          className="bg-indigo-800 text-white p-8 rounded-xl shadow-lg transform transition hover:scale-105 hover:bg-indigo-700 cursor-pointer"
+          className="bg-black text-blue-400 p-8 rounded-xl shadow-lg transform transition hover:scale-105 hover:bg-blue-800 cursor-pointer"
         >
           <div className="flex flex-col items-center">
-            <FaSchool className="text-6xl mb-4" />
+            <FaSchool className="text-6xl mb-4 text-blue-500" />
             <h2 className="text-2xl font-semibold mb-2">Student</h2>
-            <p className="text-center text-sm text-gray-200">
+            <p className="text-center text-sm text-blue-200">
               Login as a student to explore courses, materials, and assignments.
             </p>
           </div>
@@ -98,12 +98,12 @@ const ChooseUser = ({ visitor }) => {
         {/* Teacher Card */}
         <div
           onClick={() => navigateHandler("Teacher")}
-          className="bg-indigo-800 text-white p-8 rounded-xl shadow-lg transform transition hover:scale-105 hover:bg-indigo-700 cursor-pointer"
+          className="bg-black text-blue-400 p-8 rounded-xl shadow-lg transform transition hover:scale-105 hover:bg-blue-800 cursor-pointer"
         >
           <div className="flex flex-col items-center">
-            <FaChalkboardTeacher className="text-6xl mb-4" />
+            <FaChalkboardTeacher className="text-6xl mb-4 text-blue-500" />
             <h2 className="text-2xl font-semibold mb-2">Teacher</h2>
-            <p className="text-center text-sm text-gray-200">
+            <p className="text-center text-sm text-blue-200">
               Login as a teacher to create courses, assignments, and track students.
             </p>
           </div>
@@ -112,10 +112,10 @@ const ChooseUser = ({ visitor }) => {
 
       {/* Loader */}
       {loader && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="text-center text-white">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="text-center text-blue-400">
             <svg
-              className="animate-spin h-10 w-10 mx-auto mb-2 text-white"
+              className="animate-spin h-10 w-10 mx-auto mb-2 text-blue-500"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -145,3 +145,4 @@ const ChooseUser = ({ visitor }) => {
 };
 
 export default ChooseUser;
+

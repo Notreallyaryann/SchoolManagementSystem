@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const Teacher = require('../models/teacherSchema.js');
 const Subject = require('../models/subjectSchema.js');
+const Admin = require('../models/adminSchema.js');
 
 const teacherRegister = async (req, res) => {
     const { name, email, password, role, school, teachSubject, teachSclass } = req.body;
@@ -28,25 +29,33 @@ const teacherRegister = async (req, res) => {
 
 const teacherLogIn = async (req, res) => {
     try {
-        let teacher = await Teacher.findOne({ email: req.body.email });
-        if (teacher) {
-            const validated = await bcrypt.compare(req.body.password, teacher.password);
-            if (validated) {
-                teacher = await teacher.populate("teachSubject", "subName sessions")
-                teacher = await teacher.populate("school", "schoolName")
-                teacher = await teacher.populate("teachSclass", "sclassName")
-                teacher.password = undefined;
-                res.send(teacher);
-            } else {
-                res.send({ message: "Invalid password" });
-            }
-        } else {
-            res.send({ message: "Teacher not found" });
+        const { email, password, schoolId } = req.body;
+
+        // Find teacher with matching email AND school
+        let teacher = await Teacher.findOne({ email, school: schoolId });
+
+        if (!teacher) {
+            return res.send({ message: "Teacher not found or wrong school" });
         }
+
+        const validated = await bcrypt.compare(password, teacher.password);
+        if (!validated) {
+            return res.send({ message: "Invalid password" });
+        }
+
+        // Populate necessary fields
+        teacher = await teacher.populate("teachSubject", "subName sessions");
+        teacher = await teacher.populate("school", "schoolName");
+        teacher = await teacher.populate("teachSclass", "sclassName");
+        teacher.password = undefined;
+
+        res.send(teacher);
+
     } catch (err) {
         res.status(500).json(err);
     }
 };
+
 
 const getTeachers = async (req, res) => {
     try {
@@ -192,6 +201,17 @@ const teacherAttendance = async (req, res) => {
     }
 };
 
+
+
+//get schools
+const getAllSchools = async (req, res) => {
+    try {
+        const schools = await Admin.find({}, '_id schoolName'); // only _id and schoolName
+        res.status(200).json(schools);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching schools', error: err.message });
+    }
+};
 module.exports = {
     teacherRegister,
     teacherLogIn,
@@ -201,5 +221,6 @@ module.exports = {
     deleteTeacher,
     deleteTeachers,
     deleteTeachersByClass,
-    teacherAttendance
+    teacherAttendance,
+    getAllSchools
 };

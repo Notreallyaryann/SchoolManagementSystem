@@ -53,7 +53,8 @@ const StudentProfile = () => {
         )}
       </div>
 
-      {/* Other Info */}
+      {/*
+      // Other Info
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="mb-4">
           <h3 className="text-xl font-semibold">Personal Information</h3>
@@ -93,8 +94,12 @@ const StudentProfile = () => {
           </div>
         </div>
       </div>
+      */}
     </div>
   );
 };
 
 export default StudentProfile;
+
+
+

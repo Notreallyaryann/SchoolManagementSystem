@@ -18,10 +18,10 @@ const Logout = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-            <div className="border border-gray-300 rounded-xl p-8 flex flex-col justify-center items-center shadow-md bg-purple-100 bg-opacity-40 text-black w-full max-w-md">
-                <h1 className="text-2xl font-bold mb-4">{currentUser.name}</h1>
-                <p className="mb-6 text-center text-lg">
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-black via-gray-900 to-blue-900 p-4">
+            <div className="border border-blue-500 rounded-xl p-8 flex flex-col justify-center items-center shadow-lg bg-black bg-opacity-70 text-white w-full max-w-md">
+                <h1 className="text-2xl font-bold mb-4 text-blue-400">{currentUser.name}</h1>
+                <p className="mb-6 text-center text-lg text-blue-200">
                     Are you sure you want to log out?
                 </p>
                 <button 
@@ -32,7 +32,7 @@ const Logout = () => {
                 </button>
                 <button 
                     onClick={handleCancel}
-                    className="w-full py-3 px-6 bg-purple-700 hover:bg-purple-800 text-white font-medium rounded-lg transition-colors"
+                    className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
                 >
                     Cancel
                 </button>
@@ -42,3 +42,4 @@ const Logout = () => {
 };
 
 export default Logout;
+

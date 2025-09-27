@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Students from "../assets/students.png";
 import { FaUserGraduate } from "react-icons/fa";
 
-
 const Homepage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-black via-gray-900 to-blue-900 text-white">
@@ -68,23 +67,34 @@ const Homepage = () => {
             </div>
           </div>
         </section>
+
+        {/* Contact Us Section */}
+        <section className="py-16 bg-gray-900 bg-opacity-70">
+          <div className="max-w-md mx-auto bg-gray-800 p-8 rounded-2xl shadow-lg text-center">
+            <h3 className="text-2xl font-bold text-blue-400 mb-6">Contact Us</h3>
+            <p className="text-gray-300 mb-2">
+              <span className="font-semibold text-white">Email:</span>{" "}
+              <span className="text-blue-400">findaryan.info@gmail.com</span>
+            </p>
+            <p className="text-gray-300 mb-2">
+              <span className="font-semibold text-white">Phone:</span>{" "}
+              <span className="text-blue-400">+91 9984934842</span>
+            </p>
+            <p className="text-gray-300">
+              <span className="font-semibold text-white">Address:</span>{" "}
+              <span className="text-blue-400">Lucknow, Uttar Pradesh, India</span>
+            </p>
+          </div>
+        </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-black bg-opacity-80 text-gray-300 py-6 mt-10">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-          <p>&copy; {new Date().getFullYear()} SchoolMS. All rights reserved.</p>
-          <div className="flex flex-col md:flex-row gap-4 mt-4 md:mt-0">
-            <p>Email: <span className="text-blue-400">findaryan.info@gmail.com</span></p>
-            <p>Phone: <span className="text-blue-400">+91 9984934842</span></p>
-          </div>
-        </div>
-      </footer>
+     
     </div>
   );
 };
 
 export default Homepage;
+
 
 
 

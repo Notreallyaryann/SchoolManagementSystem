@@ -74,7 +74,7 @@ const Homepage = () => {
             <h3 className="text-2xl font-bold text-blue-400 mb-6">Contact Us</h3>
             <p className="text-gray-300 mb-2">
               <span className="font-semibold text-white">Email:</span>{" "}
-              <span className="text-blue-400">aryanpatel998493@gmail.com</span>
+              <span className="text-blue-400"> findaryan.info@gmail.com</span>
             </p>
             <p className="text-gray-300 mb-2">
               <span className="font-semibold text-white">Phone:</span>{" "}

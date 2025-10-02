@@ -25,7 +25,7 @@ const connectDB = async () => {
 connectDB();
 
 // API routes
-app.use("/api", Routes);
+app.use("/", Routes);
 
 // ----------------------
 // Serve React frontend
